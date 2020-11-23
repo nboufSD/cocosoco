@@ -22,8 +22,10 @@ export const ParticipateAction = actionCreator.async<
   {},
   {
     localPeer: Peer;
+    localPeer1: Peer;
     localStream: MediaStream;
-    room: any;
+    room_stream: any;
+    room_function: any;
   },
   { error: any }
 >("PARTICIPATE");
@@ -89,14 +91,16 @@ const pointingTimerMap = new Map();
 
 export function participate(
   key: string,
+  key1: string,
   network: "mesh" | "sfu",
-  roomId: string
+  room_streamId: string,
+  room_functionId: string
 ) {
   return async (
     dispatch: ThunkDispatch<TStore, void, AnyAction>,
     getState: () => TStore
   ) => {
-    const params = { key, network, roomId };
+    const params = { key, key1, network, room_streamId, room_functionId };
     try {
       dispatch(ParticipateAction.started(params));
 
@@ -105,20 +109,42 @@ export function participate(
         const peer = new Peer({ key: key });
         peer.on("open", () => r(peer));
       });
+      const localPeer1: Peer = await new Promise(r => {
+        const peer1 = new Peer({ key: key1 });
+        peer1.on("open", () => r(peer1));
+      });
 
-      const room = localPeer.joinRoom(roomId, {
+      const room_stream = localPeer1.joinRoom(room_streamId, {
         mode: network,
         stream: localStream,
       });
+      const room_function = localPeer.joinRoom(room_functionId, {
+        mode: network,
+        // stream: localStream,
+      });
 
-      room.on("peerLeave", peerId => dispatch(RemovePeerAction({ peerId })));
-      room.on("stream", stream => onStream(dispatch, getState(), stream));
-      room.on("data", ({ data }) => onData(dispatch, data));
+      room_stream.on("stream", stream =>
+        onStream(dispatch, getState(), stream)
+      );
+      // room_stream.on("peerLeave", peerId =>
+      //   dispatch(RemovePeerAction({ peerId }))
+      // );
+      // room_stream.on("data", ({ data }) => onData(dispatch, data));
+
+      // room_function.on("stream", stream =>
+      //   onStream(dispatch, getState(), stream)
+      // );
+      room_function.on("peerLeave", peerId =>
+        dispatch(RemovePeerAction({ peerId }))
+      );
+      room_function.on("data", ({ data }) => onData(dispatch, data));
 
       const result = {
         localPeer,
+        localPeer1,
         localStream,
-        room,
+        room_stream,
+        room_function,
       };
 
       dispatch(ParticipateAction.done({ result, params }));
@@ -159,9 +185,9 @@ export function selectPeer(peerId: string) {
     try {
       dispatch(SelectPeerAction.started(params));
 
-      const room = getState()?.state.room;
-      if (room) {
-        room.send({ type: "peer-selected", peerId });
+      const room_function = getState()?.state.room_function;
+      if (room_function) {
+        room_function.send({ type: "peer-selected", peerId });
         // As the room.send does not send to the local peer, update manually.
         dispatch(OnPeerSelectedAction({ peerId }));
       }
@@ -185,10 +211,10 @@ export function setPointing(x: number, y: number) {
 
       const state = getState()?.state;
 
-      const peerId = state.localPeer?.id;
+      const peerId = state.localPeer1?.id;
 
       if (peerId) {
-        state.room?.send({ type: "pointing-added", peerId, x, y });
+        state.room_function?.send({ type: "pointing-added", peerId, x, y });
         // As the room.send does not send to the local peer, update manually.
         dispatch(addPointing(peerId, x, y));
       }
@@ -211,7 +237,7 @@ export function setTransform(x: number, y: number, scale: number) {
       dispatch(SetTransformAcrion.started(params));
 
       const state = getState()?.state;
-      state.room?.send({ type: "transform-changed", x, y, scale });
+      state.room_function?.send({ type: "transform-changed", x, y, scale });
 
       dispatch(SetTransformAcrion.done({ result: {}, params }));
     } catch (error) {
@@ -241,7 +267,7 @@ export function switchCamera() {
 
       // parameter of replaceStream is defined as MediaSource, but localStream is MediaStream.
       // I don't know why..
-      (state?.room as any)?.replaceStream(localStream);
+      (state?.room_stream as any)?.replaceStream(localStream);
 
       const result = { localStream };
 
@@ -350,9 +376,9 @@ export function InitializeMap(key: string) {
         }
 
         const presenter = state.presenter?.peerId;
-        const localpeer = state.localPeer?.id;
+        const localpeer = state.localPeer1?.id;
         if (presenter === localpeer) {
-          state.room?.send({
+          state.room_function?.send({
             type: "location-changed",
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
@@ -381,7 +407,7 @@ function onStream(
   dispatch(AddPeerAction({ peerId: stream.peerId, stream }));
   // Tell who is a presenter now, to peer joined newly.
   if (store.state.presenter) {
-    store.state.room?.send({
+    store.state.room_function?.send({
       type: "peer-selected",
       peerId: store.state.presenter.peerId,
     });

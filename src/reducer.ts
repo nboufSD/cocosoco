@@ -23,8 +23,10 @@ export interface IState {
   isCameraEnabled: boolean;
   isMapEnabled: boolean;
   localPeer?: Peer;
+  localPeer1?: Peer;
   localStream?: MediaStream;
-  room?: SFURoom | MeshRoom;
+  room_stream?: SFURoom | MeshRoom;
+  room_function?: SFURoom | MeshRoom;
   pointings: Pointing[];
   map?: Map;
   presenter?: Member;
@@ -66,10 +68,16 @@ export const reducer = reducerWithInitialState(initialState)
     });
   })
   .case(ParticipateAction.done, (state, { result }) => {
-    const { localPeer, localStream, room } = result;
+    const {
+      localPeer,
+      localPeer1,
+      localStream,
+      room_stream,
+      room_function,
+    } = result;
 
     const audience = {
-      peerId: localPeer.id,
+      peerId: (localPeer.id = localPeer1.id),
       stream: localStream,
     };
     const audiences = [audience];
@@ -77,8 +85,10 @@ export const reducer = reducerWithInitialState(initialState)
     return Object.assign({}, state, {
       audiences,
       localPeer,
+      localPeer1,
       localStream,
-      room,
+      room_stream,
+      room_function,
     });
   })
   .case(RemovePeerAction, (state, { peerId }) => {

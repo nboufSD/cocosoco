@@ -14,6 +14,7 @@ import "./Presenter.css";
 
 interface IProps {
   localPeer?: Peer;
+  // localPeer1?: Peer;
   pointings: Pointing[];
   presenter?: Member;
   transform: Transform;
@@ -205,7 +206,7 @@ class Presenter extends React.PureComponent<IProps> {
 
 const mapStateToProps = (store: TStore) => {
   return {
-    localPeer: store.state.localPeer,
+    localPeer: store.state.localPeer1,
     pointings: store.state.pointings,
     presenter: store.state.presenter,
     transform: store.state.transform,
