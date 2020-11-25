@@ -17,7 +17,7 @@
 
 .audience-item__video {
   pointer-events: none;
-  clip-path: circle(36%);
+  clip-path: circle(0%);
   width: 13vw;
   height: 13vw;
   max-width: 110px;

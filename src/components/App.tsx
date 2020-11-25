@@ -8,15 +8,14 @@ import Room from "./Room";
 import "./App.css";
 
 interface IProps {
-  room_stream: any;
-  room_function: any;
+  room: any;
 }
 
 class App extends React.PureComponent<IProps> {
   render() {
     return (
       <React.Fragment>
-        {this.props.room_stream ? <Room /> : <Participation />}
+        {this.props.room ? <Room /> : <Participation />}
       </React.Fragment>
     );
   }
@@ -24,8 +23,7 @@ class App extends React.PureComponent<IProps> {
 
 const mapStateToProps = (store: TStore) => {
   return {
-    room_stream: store.state.room_stream,
-    room_function: store.state.room_function,
+    room: store.state.room,
   };
 };
 

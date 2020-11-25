@@ -27,6 +27,9 @@ class Pointing extends React.PureComponent<IProps> {
     return (
       <mark className="pointing" style={styles}>
         <img className="pointing__image" src={logo} alt={audience.peerId} />
+        <div className="pointing__audience">
+          <div>静止画</div>
+        </div>
       </mark>
     );
   }

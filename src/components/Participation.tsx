@@ -16,11 +16,9 @@ interface IProps {
 
 interface IState {
   key: string | null;
-  key1: string | null;
   mapkey: string | null;
   network: string | null;
-  room_stream: string | null;
-  room_function: string | null;
+  room: string | null;
   error: string | null;
   isParticipating?: boolean;
 }
@@ -32,14 +30,12 @@ class Participation extends React.PureComponent<IProps, IState> {
 
     const url = new URL(document.URL);
     const key = url.searchParams.get("key");
-    const key1 = url.searchParams.get("key1");
     const mapkey = url.searchParams.get("mapkey");
     const network = url.searchParams.get("network");
-    const room_stream = url.searchParams.get("room_stream");
-    const room_function = url.searchParams.get("room_function");
+    const room = url.searchParams.get("room");
 
     let error = null;
-    if (!key || !key1 || !network || !room_stream || !room_function) {
+    if (!key || !network || !room) {
       error = "No specific key, network or room";
     } else if (network !== "sfu" && network !== "mesh") {
       error = "Network should be 'sfu' or 'mesh'";
@@ -47,34 +43,19 @@ class Participation extends React.PureComponent<IProps, IState> {
       error = "No specific GoogleMapAPIkey";
     }
 
-    this.state = {
-      key,
-      key1,
-      mapkey,
-      network,
-      room_stream,
-      room_function,
-      error,
-    };
+    this.state = { key, mapkey, network, room, error };
   }
 
   _onClick() {
     const { participate, InitializeMap } = this.props;
-    const {
-      key,
-      key1,
-      mapkey,
-      network,
-      room_stream,
-      room_function,
-    } = this.state;
+    const { key, mapkey, network, room } = this.state;
     this.setState({ isParticipating: true });
-    participate(key, key1, network, room_stream, room_function);
+    participate(key, network, room);
     InitializeMap(mapkey);
   }
 
   render() {
-    const { room_stream, room_function, error, isParticipating } = this.state;
+    const { room, error, isParticipating } = this.state;
 
     return (
       <section className="participation">
@@ -87,10 +68,7 @@ class Participation extends React.PureComponent<IProps, IState> {
             disabled={isParticipating}
           >
             <label>participate to </label>
-            <label className="participation__room_stream">{room_stream}</label>
-            <label className="participation__room_function">
-              {room_function}
-            </label>
+            <label className="participation__room">{room}</label>
           </button>
         )}
       </section>
@@ -101,14 +79,8 @@ class Participation extends React.PureComponent<IProps, IState> {
 const mapDispatchToProps = (
   dispatch: ThunkDispatch<TStore, void, AnyAction>
 ) => ({
-  participate: (
-    key: string,
-    key1: string,
-    network: "mesh" | "sfu",
-    room_stream: string,
-    room_function: string
-  ) => {
-    dispatch(participate(key, key1, network, room_stream, room_function));
+  participate: (key: string, network: "mesh" | "sfu", room: string) => {
+    dispatch(participate(key, network, room));
   },
   InitializeMap: (mapkey: string) => {
     dispatch(InitializeMap(mapkey));
