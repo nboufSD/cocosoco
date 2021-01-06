@@ -1,18 +1,19 @@
 .audience-item {
   clip-path: circle(36%);
-  width: 14vw;
-  height: 14vw;
-  max-width: 120px;
-  max-height: 120px;
+  width: 12vw;
+  height: 12vw;
+  max-width: 100px;
+  max-height: 100px;
   background-color: #f9f9fa;
-  pointer-events: auto;
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 
 .audience-item--selected {
   background-color: #ff1ad9;
+  order: -1;
 }
 
 .audience-item__video {
@@ -21,10 +22,9 @@
 }
 
 .audience-item__icon {
-  pointer-events: none;
   clip-path: circle(36%);
-  width: 13vw;
-  height: 13vw;
-  max-width: 110px;
-  max-height: 110px;
+  width: 11vw;
+  height: 11vw;
+  max-width: 90px;
+  max-height: 90px;
 }
