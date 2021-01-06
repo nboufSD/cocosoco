@@ -2,7 +2,7 @@ import React from "react";
 
 import { Member } from "../types";
 
-import "./AudienceItem.css";
+import "./PresenterItem.css";
 
 interface IProps {
   audience: Member;
@@ -11,7 +11,7 @@ interface IProps {
   amIPresenter: boolean;
 }
 
-class AudienceItem extends React.PureComponent<IProps> {
+class PresenterItem extends React.PureComponent<IProps> {
   // As video.playsInline is not defined in HTMLVideoElement, add "any" as well.
   private _videoRef = React.createRef<HTMLVideoElement | any>();
 
@@ -36,24 +36,20 @@ class AudienceItem extends React.PureComponent<IProps> {
   }
 
   render() {
-    const { isSelected, isMuted, audience, amIPresenter } = this.props;
+    const { isMuted, audience, amIPresenter } = this.props;
     return amIPresenter ? (
-      <li
-        className={
-          "audience-item " + (isSelected ? "audience-item--selected" : "")
-        }
-      >
-        <img src={audience.dataURL} className="audience-item__icon"></img>
+      <li className="presenter-item">
+        <img src={audience.dataURL} className="presenter-item__icon"></img>
         <video
-          className="audience-item__video"
+          className="presenter-item__video"
           muted={isMuted}
           ref={this._videoRef}
         />
       </li>
     ) : (
-      <div className="audience-item--none"></div>
+      <div className="presenter-item--none"></div>
     );
   }
 }
 
-export default AudienceItem;
+export default PresenterItem;

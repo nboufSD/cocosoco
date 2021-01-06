@@ -4,9 +4,9 @@ import { connect } from "react-redux";
 import { TStore } from "../store";
 import { Member } from "../types";
 
-import AudienceItem from "./AudienceItem";
+import PresenterItem from "./PresenterItem";
 
-import "./AudienceList.css";
+import "./PresenterList.css";
 
 interface IProps {
   audiences: Member[];
@@ -14,19 +14,19 @@ interface IProps {
   presenter?: Member;
 }
 
-class AudienceList extends React.PureComponent<IProps> {
+class PresenterList extends React.PureComponent<IProps> {
   render() {
     const { audiences, localPeer, presenter } = this.props;
 
     return (
-      <ul className="audience-list">
+      <ul className="presenter-list">
         {audiences.map(audience => (
-          <AudienceItem
+          <PresenterItem
             key={audience.peerId}
             audience={audience}
             isMuted={audience.peerId === localPeer?.id}
             isSelected={audience.peerId === presenter?.peerId}
-            amIPresenter={audience?.peerId !== presenter?.peerId}
+            amIPresenter={audience?.peerId === presenter?.peerId}
           />
         ))}
       </ul>
@@ -42,4 +42,4 @@ const mapStateToProps = (store: TStore) => {
   };
 };
 
-export default connect(mapStateToProps)(AudienceList);
+export default connect(mapStateToProps)(PresenterList);

@@ -1,6 +1,11 @@
 import React from "react";
+import { connect } from "react-redux";
+
+import { TStore } from "../store";
+import { Member } from "../types";
 
 import PresenterSelecting from "./PresenterSelecting";
+import PresenterList from "./PresenterList";
 import AudienceList from "./AudienceList";
 import MapPanel from "./MapPanel";
 import Presenter from "./Presenter";
@@ -8,9 +13,24 @@ import ToolList from "./ToolList";
 
 import "./Room.css";
 
-class Room extends React.PureComponent {
+interface IProps {
+  presenter?: Member;
+}
+
+class Room extends React.PureComponent<IProps> {
   render() {
-    return (
+    const { presenter } = this.props;
+
+    return presenter ? (
+      <section className="room">
+        <ToolList />
+        <Presenter />
+        <MapPanel />
+        <AudienceList />
+        <PresenterList />
+        <PresenterSelecting />
+      </section>
+    ) : (
       <section className="room">
         <ToolList />
         <Presenter />
@@ -22,4 +42,10 @@ class Room extends React.PureComponent {
   }
 }
 
-export default Room;
+const mapStateToProps = (store: TStore) => {
+  return {
+    presenter: store.state.presenter,
+  };
+};
+
+export default connect(mapStateToProps)(Room);

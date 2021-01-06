@@ -1,0 +1,9 @@
+.presenter-list {
+  position: absolute;
+  left: 16px;
+  bottom: 116px;
+  width: 100%;
+  display: flex;
+  justify-content: left;
+  pointer-events: none;
+}

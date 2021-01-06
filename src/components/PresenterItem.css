@@ -1,5 +1,5 @@
-.audience-item {
-  clip-path: circle(20%);
+.presenter-item {
+  clip-path: circle(36%);
   width: 14vw;
   height: 14vw;
   max-width: 120px;
@@ -9,22 +9,24 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #ff1ad9;
 }
 
-.audience-item__video {
+.presenter-item__video {
   width: 0;
   height: 0;
 }
 
-.audience-item__icon {
+.presenter-item__icon {
   pointer-events: none;
-  clip-path: circle(45%);
+  clip-path: circle(36%);
   width: 13vw;
   height: 13vw;
-  max-width: 50px;
-  max-height: 50px;
+  max-width: 110px;
+  max-height: 110px;
 }
 
-.audience-item--none {
+.presenter-item--none {
   display: none;
 }
+
