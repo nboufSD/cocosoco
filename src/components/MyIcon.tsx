@@ -7,28 +7,28 @@ import { Member } from "../types";
 
 import AudienceNumbers from "./AudienceNumbers";
 
-import "./PresenterIcon.css";
+import "./MyIcon.css";
 
 interface IProps {
   audiences: Member[];
   presenter?: Member;
+  localPeer?: Peer;
 }
 
-class PresenterIcon extends React.PureComponent<IProps> {
+class MyIcon extends React.PureComponent<IProps> {
   render() {
-    const { audiences, presenter } = this.props;
-    const index = audiences.findIndex(a => a.peerId === presenter?.peerId);
+    const { audiences, presenter, localPeer } = this.props;
+    const index = audiences.findIndex(a => a.peerId === localPeer?.id);
     const className =
-      "presenter-item " + (presenter ? "" : "presenter-item--no-presenter");
+      "myicon-item " +
+      (presenter?.peerId === localPeer?.id ? "myicon-item--presenter" : "");
     return (
       <>
         <span className={className}>
-          {presenter ? (
-            <img
-              src={audiences[index].dataURL}
-              className="presenter-item__icon"
-            ></img>
-          ) : null}
+          <img
+            src={audiences[index].dataURL}
+            className="myicon-item__icon"
+          ></img>
         </span>
         <AudienceNumbers />
       </>
@@ -40,7 +40,8 @@ const mapStateToProps = (store: TStore) => {
   return {
     audiences: store.state.audiences,
     presenter: store.state.presenter,
+    localPeer: store.state.localPeer,
   };
 };
 
-export default connect(mapStateToProps)(PresenterIcon);
+export default connect(mapStateToProps)(MyIcon);

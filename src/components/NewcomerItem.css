@@ -1,0 +1,21 @@
+.newcomer-item {
+  clip-path: circle(36%);
+  width: 10vw;
+  height: 10vw;
+  max-width: 90px;
+  max-height: 90px;
+  background-color: transparent;
+  animation: anim 2.5s forwards;
+}
+
+@keyframes anim {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

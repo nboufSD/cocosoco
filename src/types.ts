@@ -16,6 +16,7 @@ export interface Member {
   peerId: string;
   stream?: any;
   dataURL?: string;
+  isNewcomer?: boolean;
 }
 
 export interface Pointing {

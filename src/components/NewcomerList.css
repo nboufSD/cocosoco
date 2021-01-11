@@ -1,0 +1,10 @@
+.newcomer-list {
+  position: absolute;
+  bottom: 14vw;
+  width: 14vw;
+  max-width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}

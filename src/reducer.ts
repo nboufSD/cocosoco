@@ -60,7 +60,7 @@ export const reducer = reducerWithInitialState(initialState)
     const audiencesInPreparation = state.audiencesInPreparation.filter(
       p => p.peerId !== peerId
     );
-    const audience = { peerId, stream, dataURL };
+    const audience = { peerId, stream, dataURL, isNewcomer: true };
 
     // As the presenter peer joined after firing `peer-selected` event, set as a presenter.
     const presenter =
@@ -218,16 +218,15 @@ export const reducer = reducerWithInitialState(initialState)
   .case(OnTransformChangedAction, (state, { x, y, scale }) => {
     return Object.assign({}, state, { transform: { x, y, scale } });
   })
-  .case(UpdateAudience, (state, { peerId, stream, dataURL }) => {
+  .case(UpdateAudience, (state, { peerId, stream, dataURL, isNewcomer }) => {
     const index = state.audiences.findIndex(a => a.peerId === peerId);
     const audiences = state.audiences;
     let audience = audiences[index];
 
-    if (stream) {
-      audience = Object.assign({}, audience, { stream });
-    } else {
-      audience = Object.assign({}, audience, { dataURL });
-    }
+    stream = stream || audience.stream;
+    dataURL = dataURL || audience.dataURL;
+    isNewcomer = isNewcomer !== undefined ? isNewcomer : audience.isNewcomer;
+    audience = Object.assign({}, audience, { stream, dataURL, isNewcomer });
 
     audiences[index] = audience;
     return Object.assign({}, state, { audiences: [...audiences] });

@@ -102,6 +102,7 @@ export const UpdateAudience = actionCreator<{
   peerId: string;
   stream?: any;
   dataURL?: string;
+  isNewcomer?: boolean;
 }>("UPDATE_AUDIENCE");
 
 const pointingTimerMap = new Map();
@@ -496,6 +497,10 @@ function updateAudienceInPreparation(
 
   if (stream && dataURL) {
     dispatch(AddAudience({ peerId, stream, dataURL }));
+    setTimeout(
+      () => dispatch(UpdateAudience({ peerId, isNewcomer: false })),
+      2500
+    );
   } else {
     dispatch(AddAudienceInPreparation({ peerId, stream, dataURL }));
 
