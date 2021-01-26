@@ -12,6 +12,7 @@ import {
   ToggleAudioMutingAction,
   ToggleCameraMutingAction,
   ToggleMapMutingAction,
+  AudienceListIsClickAction,
   OnMapLocationChangedAction,
   OnMapLocationMutedAction,
   OnMapLocationWatchedAction,
@@ -26,6 +27,7 @@ export interface IState {
   isAudioEnabled: boolean;
   isCameraEnabled: boolean;
   isMapEnabled: boolean;
+  isIconClicked: boolean;
   isPresenterMapEnabled: boolean;
   likes: Like[];
   localPeer?: Peer;
@@ -45,6 +47,7 @@ const initialState: IState = {
   isAudioEnabled: true,
   isCameraEnabled: true,
   isMapEnabled: false,
+  isIconClicked: false,
   isPresenterMapEnabled: false,
   likes: [],
   pointings: [],
@@ -168,6 +171,11 @@ export const reducer = reducerWithInitialState(initialState)
     const { isEnabled } = result;
 
     return Object.assign({}, state, { isMapEnabled: isEnabled });
+  })
+  .case(AudienceListIsClickAction.done, (state, { result }) => {
+    const { isIconClicked } = result;
+
+    return Object.assign({}, state, { isIconClicked });
   })
   .case(OnMapLocationChangedAction, (state, { lat, lng }) => {
     return Object.assign({}, state, {

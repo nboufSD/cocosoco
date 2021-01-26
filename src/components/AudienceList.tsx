@@ -12,14 +12,40 @@ interface IProps {
   audiences: Member[];
   localPeer?: Peer;
   presenter?: Member;
+  isIconClicked: boolean;
 }
 
 class AudienceList extends React.PureComponent<IProps> {
+  private _uListRef = React.createRef<HTMLUListElement | any>();
+
   render() {
-    const { audiences, localPeer, presenter } = this.props;
+    const { audiences, localPeer, presenter, isIconClicked } = this.props;
+
+    const className =
+      "audience-list " + (isIconClicked ? "audience-list--animation" : "");
+    let height;
+    if (this._uListRef.current) {
+      height = this._uListRef.current.clientHeight;
+      if (isIconClicked) {
+        const icon_height = height / audiences.length;
+        this._uListRef.current.style.setProperty("--height", `${height}px`);
+        this._uListRef.current.style.setProperty(
+          "--icon_height",
+          `${icon_height}px`
+        );
+        this._uListRef.current.style.setProperty(
+          "--speed",
+          `${1 / (audiences.length / 2)}s`
+        );
+      }
+    }
+
+    const styles = {
+      bottom: `${height ? height : 0}`,
+    };
 
     return (
-      <ul className="audience-list">
+      <ul className={className} ref={this._uListRef} style={styles}>
         {audiences.map(audience => (
           <AudienceItem
             key={audience.peerId}
@@ -38,6 +64,7 @@ const mapStateToProps = (store: TStore) => {
     audiences: store.state.audiences,
     localPeer: store.state.localPeer,
     presenter: store.state.presenter,
+    isIconClicked: store.state.isIconClicked,
   };
 };
 

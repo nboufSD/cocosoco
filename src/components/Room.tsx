@@ -1,6 +1,6 @@
 import React from "react";
 
-import PresenterSelecting from "./PresenterSelecting";
+// import PresenterSelecting from "./PresenterSelecting";
 import PresenterIcon from "./PresenterIcon";
 import AudienceList from "./AudienceList";
 import MapPanel from "./MapPanel";
@@ -18,7 +18,7 @@ class Room extends React.PureComponent {
         <MapPanel />
         <div className="room__viewtoollist">
           <PresenterIcon />
-          <PresenterSelecting />
+          {/* <PresenterSelecting /> */}
         </div>
         <AudienceList />
       </section>

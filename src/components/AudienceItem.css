@@ -15,6 +15,10 @@
   background-color: #ff1ad9;
 }
 
+.audience-item--mine {
+  visibility: hidden;
+}
+
 .audience-item__video {
   width: 0;
   height: 0;

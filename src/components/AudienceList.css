@@ -3,8 +3,36 @@
   z-index: -1;
   position: absolute;
   bottom: 0;
+  height: auto;
   width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
   pointer-events: none;
+  --height: 0;
+  --icon_height: 0;
+  --speed: 0;
+}
+
+.audience-list--animation {
+  overflow: hidden;
+  z-index: 0;
+  animation: move_bottom 1.0s forwards, move_height var(--speed) forwards;
+}
+
+@keyframes move_bottom {
+  0% {
+  	bottom: var(--icon_height);
+  }
+  100% {
+    bottom: 0;
+  }
+ }
+ @keyframes move_height {
+  0% {
+  	height: 0;
+  }
+  100% {
+    height: var(--height);
+  }
 }

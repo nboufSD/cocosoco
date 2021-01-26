@@ -39,7 +39,9 @@ class AudienceItem extends React.PureComponent<IProps> {
     return (
       <li
         className={
-          "audience-item " + (isSelected ? "audience-item--selected" : "")
+          "audience-item " +
+          (isSelected ? "audience-item--selected" : "") +
+          (isMuted ? "audience-item--mine" : "")
         }
       >
         <img src={audience.dataURL} className="audience-item__icon"></img>

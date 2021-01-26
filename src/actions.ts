@@ -74,6 +74,11 @@ export const ToggleMapMutingAction = actionCreator.async<
   { isEnabled: boolean },
   { error: any }
 >("TOGGLE_MAP_MUTING");
+export const AudienceListIsClickAction = actionCreator.async<
+  {},
+  { isIconClicked: boolean },
+  { error: any }
+>("PRESENTERICON_CLICKED");
 export const OnMapLocationChangedAction = actionCreator<{
   lat: number;
   lng: number;
@@ -391,6 +396,28 @@ export function toggleMapMuting() {
       dispatch(ToggleMapMutingAction.done({ result, params }));
     } catch (error) {
       dispatch(ToggleMapMutingAction.failed({ error, params }));
+    }
+  };
+}
+
+export function AudienceListIsClick() {
+  return async (
+    dispatch: ThunkDispatch<TStore, void, AnyAction>,
+    getState: () => TStore
+  ) => {
+    const params = {};
+
+    try {
+      dispatch(AudienceListIsClickAction.started(params));
+
+      const state = getState()?.state;
+      const isClicked = !state?.isIconClicked;
+
+      const result = { isIconClicked: isClicked };
+
+      dispatch(AudienceListIsClickAction.done({ result, params }));
+    } catch (error) {
+      dispatch(AudienceListIsClickAction.failed({ error, params }));
     }
   };
 }
